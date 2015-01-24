@@ -22,8 +22,8 @@
 */
 #import "MyAnalogStick.h"
 
-#define PRESSED_INSET       5
-#define AREA_INSET          4
+#define PRESSED_INSET   5
+#define AREA_INSET      4
 
 @implementation MyAnalogStick
 @synthesize pressed;
@@ -32,48 +32,34 @@
 @synthesize positionY = y;
 @synthesize linked;
 
-- (id)initWithFrame:(NSRect)frameRect
+- (void)setPressed:(BOOL)apressed
 {
-    if (self = [super initWithFrame:frameRect]) {
-        [self addObserver:self forKeyPath:@"deadzone" options:NSKeyValueObservingOptionNew context:NULL];
-        [self addObserver:self forKeyPath:@"positionX" options:NSKeyValueObservingOptionNew context:NULL];
-        [self addObserver:self forKeyPath:@"positionY" options:NSKeyValueObservingOptionNew context:NULL];
-        [self addObserver:self forKeyPath:@"pressed" options:NSKeyValueObservingOptionNew context:NULL];
-        [self addObserver:self forKeyPath:@"linked" options:NSKeyValueObservingOptionNew context:NULL];
-    }
-    return self;
+    pressed = apressed;
+    self.needsDisplay = YES;
 }
 
-- (void)dealloc
+- (void)setDeadzone:(int)adeadzone
 {
-    [self removeObserver:self forKeyPath:@"pressed"];
-    [self removeObserver:self forKeyPath:@"positionX"];
-    [self removeObserver:self forKeyPath:@"positiony"];
-    [self removeObserver:self forKeyPath:@"deadzone"];
-    [self removeObserver:self forKeyPath:@"linked"];
-    
-    SUPERDEALLOC;
+    deadzone = adeadzone;
+    self.needsDisplay = YES;
 }
 
-#ifdef __OBJC_GC__
-- (void)finalize
+- (void)setPositionX:(int)positionX
 {
-    [self removeObserver:self forKeyPath:@"pressed"];
-    [self removeObserver:self forKeyPath:@"positionX"];
-    [self removeObserver:self forKeyPath:@"positiony"];
-    [self removeObserver:self forKeyPath:@"deadzone"];
-    [self removeObserver:self forKeyPath:@"linked"];
-    
-    [super finalize];
+    x = positionX;
+    self.needsDisplay = YES;
 }
 
-#endif
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+- (void)setPositionY:(int)positionY
 {
-    if (object == self) {
-        [self setNeedsDisplay:YES];
-    }
+    y = positionY;
+    self.needsDisplay = YES;
+}
+
+- (void)setLinked:(BOOL)alinked
+{
+    linked = alinked;
+    self.needsDisplay = YES;
 }
 
 - (void)drawRect:(NSRect)rect

@@ -28,41 +28,22 @@
 @synthesize start;
 @synthesize specific = appSpecific;
 
-- (id)initWithFrame:(NSRect)frameRect
+- (void)setBack:(BOOL)aback
 {
-    if ((self = [super initWithFrame:frameRect]) != nil) {
-        [self addObserver:self forKeyPath:@"back" options:NSKeyValueObservingOptionNew context:NULL];
-        [self addObserver:self forKeyPath:@"start" options:NSKeyValueObservingOptionNew context:NULL];
-        [self addObserver:self forKeyPath:@"specific" options:NSKeyValueObservingOptionNew context:NULL];
-    }
-    return self;
+    back = aback;
+    self.needsDisplay = YES;
 }
 
-- (void)dealloc
+- (void)setStart:(BOOL)astart
 {
-    [self removeObserver:self forKeyPath:@"back"];
-    [self removeObserver:self forKeyPath:@"start"];
-    [self removeObserver:self forKeyPath:@"specific"];
-    
-    SUPERDEALLOC;
+    start = astart;
+    self.needsDisplay = YES;
 }
 
-#ifdef __OBJC_GC__
-- (void)finalize
+- (void)setSpecific:(BOOL)specific
 {
-    [self removeObserver:self forKeyPath:@"back"];
-    [self removeObserver:self forKeyPath:@"start"];
-    [self removeObserver:self forKeyPath:@"specific"];
-    
-    [super finalize];
-}
-#endif
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if (object == self) {
-        [self setNeedsDisplay:YES];
-    }
+    appSpecific = specific;
+    self.needsDisplay = YES;
 }
 
 + (void)drawButton:(NSString*)button inRectangle:(NSRect)rect pressed:(BOOL)down
